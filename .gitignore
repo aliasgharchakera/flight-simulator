@@ -5,3 +5,6 @@
 *.pdf
 .DS_Store
 auto
+*.synctex.gz
+*.fdb_latexmk
+*.fls
