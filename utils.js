@@ -20,12 +20,12 @@ const handleKeyDown = (e) => {
             break;
         case "3":
             if (shift) {
-                bottom_ -= 0.01;
+                bottom_ += 0.01;
             }
             break;
         case "4":
             if (shift) {
-                bottom_ += 0.01;
+                bottom_ -= 0.01;
             }
             break;
         case "5":
@@ -35,7 +35,7 @@ const handleKeyDown = (e) => {
             break;
         case "6":
             if (shift) {
-                far_ += 0.01;
+                near_ = Math.max(near_ - 0.01, 0.01);
             }
             break;
         case "r":

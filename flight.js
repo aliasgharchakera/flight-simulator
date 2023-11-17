@@ -1,10 +1,18 @@
 "use strict";
+let vBuffer;
+let cBuffer;
+let canvas;
 var program;
 var gl;
-var vertices = [];
+var points = [];
 var v
-var faces = []
-var indexed_vertices = []
+var normals = []
+
+var xMin = -10;
+var zMin = -10;
+var xMax = 10;
+var zMax = 10;
+let Escape = false;
 
 var modelViewMatrix, projectionMatrix;
 var modelViewMatrixLoc, projectionMatrixLoc;
@@ -71,28 +79,20 @@ window.onload = () => {
     if (!gl) alert("WebGL isn't available"); // Alerts if WebGL is not supported by the browser
 
     gl.viewport(0, 0, canvas.width, canvas.height); // setting the viewing port and the default color of the canvas
-    gl.clearColor(0.0, 0.0, 0.0, 1.0);
+    gl.clearColor(0.55686, 0.70196, 0.81961, 1.0);
     gl.enable(gl.DEPTH_TEST);
 
-    const program = initShaderFiles( "flight-vshader.glsl", "flight-fshader.glsl" ); // connecting to the shaders
+    xMax = canvas.width;
+    zMax = canvas.height;
+
+    program = initShaderFiles( "flight-vshader.glsl", "flight-fshader.glsl" ); // connecting to the shaders
     gl.useProgram(program);
 
-    // An EXAMPLE: A triangle
-    v = get_patch(-1,1,-1,1)
-    vertices = v.vertices
-    faces = v.indices
-    for(var i=0;i<faces.length;i++){
-        // if(i===58808){
-        //     console.log(faces[i])
-        //     console.log(vertices[faces[i]])
-        // }
-        indexed_vertices.push(vertices[faces[i]])
-    }
-    // console.log(vertices)
-    // console.log(indexed_vertices)
-    // Connecting vertices to the shader
-    gl.bindBuffer(gl.ARRAY_BUFFER, gl.createBuffer()); // Creating a Buffer
-    gl.bufferData(gl.ARRAY_BUFFER, flatten(indexed_vertices), gl.STATIC_DRAW); // Transforming (flattening) vertices into data type that Shaders can understand
+    [points,normals] = getPatch(xMin, xMax, zMin, zMax);
+
+    vBuffer = gl.createBuffer(); // Creating a Buffer
+    gl.bindBuffer(gl.ARRAY_BUFFER, vBuffer); // Creating a Buffer
+    gl.bufferData(gl.ARRAY_BUFFER, flatten(points), gl.STATIC_DRAW); // Transforming (flattening) vertices into data type that Shaders can understand
 
     // Associate out shader variables with our data buffer
     let vPosition = gl.getAttribLocation(program, "vPosition"); // Connecting vPosition from vertex shader to vertices
@@ -102,12 +102,16 @@ window.onload = () => {
     modelViewMatrixLoc = gl.getUniformLocation(program, "modelViewMatrix");
     projectionMatrixLoc = gl.getUniformLocation(program, "projectionMatrix");
 
-    // Associate out shader variables with our data buffer
-    let vColors = gl.getAttribLocation(program, "vColors"); // Connecting vColors from vertex shader to vertices
-    gl.vertexAttribPointer(vColors, 3, gl.FLOAT, false, 0, 0);
-    gl.enableVertexAttribArray(vColors);
+    document.addEventListener("keydown", handleKeyDown);
+    document.addEventListener("keyup", handleKeyUp);
 
-    render(); // calling render function
+    window.cancelAnimationFrame(anim);
+
+    if (Escape) {
+        window.cancelAnimationFrame(anim);
+    } else {
+        window.requestAnimationFrame(render);
+    }
 };
 
 
@@ -115,46 +119,88 @@ window.onload = () => {
 let render = () => {
     gl.clear(gl.COLOR_BUFFER_BIT);
 
+    let c = [];
+    for (let i = 0; i < points.length; i++) {
+        let color = vec3(0,0,0)
+        let red = 0.0, green = 0.0, blue = 0.0;
+        if (points[i][1] < -200){
+            red = 0.18039, green = 0.22353, blue = 0.55686;
+            color = vec3(red, green, blue)
+        }else if (0.0 < points[i][1] && points[i][1] < 200.0){
+            red = 0.588, green = 0.294;
+            color = vec3(red, green, blue)
+        }else if (points[i][1] > 350.0){
+            red = 1.0, green = 1.0, blue = 1.0;
+            color = vec3(red, green, blue)
+        }else{
+            red = 0.24, green = 0.294, blue = 0.08;
+            color = vec3(red, green, blue)
+        }
+        c.push(color);
+    }
+
+    colors = [];
+    for (var i = 0; i < c.length; i += 3) {
+        if (colorScheme == 0) {
+            let avg = getAvg(c[i], c[i + 1], c[i + 2]);
+            colors.push(avg);
+            colors.push(avg);
+            colors.push(avg);
+        }
+        else{
+            colors.push(c[i]);
+            colors.push(c[i + 1]);
+            colors.push(c[i + 2]);
+        }
+    }
+
+    gl.bindBuffer(gl.ARRAY_BUFFER, gl.createBuffer());
+    gl.bufferData(gl.ARRAY_BUFFER, flatten(colors), gl.STATIC_DRAW);
+
+    let colorLoc = gl.getAttribLocation(program, "vColors");
+    gl.vertexAttribPointer(colorLoc, 3, gl.FLOAT, false, 0, 0);
+    gl.enableVertexAttribArray(colorLoc);
+
+    [points,normals] = getPatch(xMin, xMax, zMin, zMax);
+
+    gl.bindBuffer(gl.ARRAY_BUFFER, vBuffer);
+
+    if (Escape == false) {
+        gl.bufferData(gl.ARRAY_BUFFER, flatten(points), gl.STATIC_DRAW);
+    }
+
+    let rotate_x_matrix = rotateX(pitch);
+    let rotate_y_matrix = rotateY(yaw);
+    let rotate_z_matrix = rotateZ(roll);
+
+    up = vec4(0, 1, 0, 0);
+    up = mult(rotate_z_matrix, up);
+    up = vec3(up[0], up[1], up[2]);
+
+    at_vec = vec4(0.0, 0.0, speed,0);
+    let rotate_xy = mult(rotate_y_matrix, rotate_x_matrix);
+    at_vec = mult(rotate_xy, at_vec);
+    at_vec = vec3(at_vec[0], at_vec[1], at_vec[2]);
+
+    if (!stopped) adjustCameraPitch();
+
+    at = add(eye, at_vec);
     modelViewMatrix = lookAt(eye, at, up);
+
+    if (!stopped) eye = add(eye, at_vec);
+
+    xMin = eye[0] - 1200;
+    xMax = eye[0] + 1200;
+
+    zMin = eye[2] - 1200;
+    zMax = eye[2] + 1200;
     
     projectionMatrix = frustum(left_, right_, bottom_, top_, near_, far_);
-
-    modelviewInv = inverse4(modelViewMatrix);
 
     gl.uniformMatrix4fv(modelViewMatrixLoc, false, flatten(modelViewMatrix));
     gl.uniformMatrix4fv(projectionMatrixLoc, false, flatten(projectionMatrix));
 
-    gl.drawArrays(gl.TRIANGLES, 0, indexed_vertices.length);
-    // gl.drawArrays(gl.POINTS, 0, 3);
-};
+    gl.drawArrays(gl.TRIANGLES, 0, points.length);
 
-const frustum = (l, r, b, t, n, f) => {
-    if (l == r) throw "frustum(): left and right are equal";
-    if (b == t) throw "frustum(): bottom and top are equal";
-    if (n == f) throw "frustum(): near and far are equal";
-
-    const w = r - l,
-        h = t - b,
-        d = f - n;
-
-    let result = mat4(
-        (2.0 * n) / w,
-        0.0,
-        (r + l) / w,
-        0.0,
-        0.0,
-        (2.0 * n) / h,
-        (t + b) / h,
-        0.0,
-        0.0,
-        0.0,
-        -(f + n) / d,
-        (-2.0 * f * n) / d,
-        0.0,
-        0.0,
-        -1,
-        0.0
-    );
-
-    return result;
+    anim = window.requestAnimationFrame(render);
 };
