@@ -8,9 +8,8 @@ var indexed_vertices = []
 
 var modelViewMatrix, projectionMatrix;
 var modelViewMatrixLoc, projectionMatrixLoc;
-var modelviewInv = new Float32Array(16);
 
-let eye = vec3(0, 0, 300.0);
+let eye = vec3(1200, 1200, 300.0);
 let at_vec = vec3(0.0, 0.0, 300.0);
 let at = add(eye, at_vec);
 let up = vec3(0.0, 1.0, 0.0);
