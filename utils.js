@@ -100,11 +100,7 @@ const handleKeyDown = (e) => {
             break;
         case "c":
         case "C":
-            if (colorScheme == 2) {
-                colorScheme = 0;
-            } else {
-                colorScheme++;
-            }
+            colorScheme = colorScheme%3;
             break;
     }
 
@@ -112,7 +108,7 @@ const handleKeyDown = (e) => {
     anim = window.requestAnimationFrame(render);
 };
 
-
+// this function was from https://gamma.cs.unc.edu/courses/graphics-s09/HW/hw2/
 const frustum = (left, right, bottom, top, near, far) => {
     if (left == right) throw "frustum(): left and right are equal";
     if (bottom == top) throw "frustum(): bottom and top are equal";
