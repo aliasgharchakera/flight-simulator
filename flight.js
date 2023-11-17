@@ -21,6 +21,20 @@ let top_ = 1.5;
 let near_ = 0.1;
 let far_ = -0.1;
 
+let pitch = 0;
+let yaw = 0;
+let roll = 0;
+
+let speed = 0.5;
+let stopped = false;
+
+var anim;
+let reset = false;
+
+var colors;
+var c;
+let colorScheme = 0;
+
 function initShaderFiles(file1, file2) {
     function createElementWithFile(file, element_id) {
         const req = new XMLHttpRequest();
