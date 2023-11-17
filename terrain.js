@@ -10,7 +10,7 @@ const get_patch = (xmin,xmax,zmin,zmax) => {
     currentVertex = 0
     for(var i=xmin;i<xmax;i+=step_x){
         for(var j=zmin;j<zmax;j+=step_z){
-            const pos = vec2(i,j)
+            const pos = vec4(i, Math.random(), j,1)
             //calculate normal here
             // const normal = vec3(0,1,0)
 
@@ -18,20 +18,12 @@ const get_patch = (xmin,xmax,zmin,zmax) => {
 
 
             if(currentVertex%z_resolution!==z_resolution-1 && currentVertex<((x_resolution*z_resolution)-x_resolution)){
-                // if(i===xmin && j===zmin){
-                //     console.log(currentVertex)
-                //     console.log(currentVertex+1)
-                //     console.log(currentVertex+x_resolution)
-                //     console.log(currentVertex+1)
-                //     console.log(currentVertex+x_resolution+1)
-                //     console.log(currentVertex+x_resolution)
-                // }
                 indices.push(currentVertex)
                 indices.push(currentVertex+1)
                 indices.push(currentVertex+x_resolution)
-                indices.push(currentVertex+1)
-                indices.push(currentVertex+x_resolution+1)
-                indices.push(currentVertex+x_resolution)
+                // indices.push(currentVertex+1)
+                // indices.push(currentVertex+x_resolution+1)
+                // indices.push(currentVertex+x_resolution)
             }
 
             currentVertex++

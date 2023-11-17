@@ -43,6 +43,7 @@ window.onload = () => {
 
     gl.viewport(0, 0, canvas.width, canvas.height); // setting the viewing port and the default color of the canvas
     gl.clearColor(0.0, 0.0, 0.0, 1.0);
+    gl.enable(gl.DEPTH_TEST);
 
     const program = initShaderFiles( "flight-vshader.glsl", "flight-fshader.glsl" ); // connecting to the shaders
     gl.useProgram(program);
@@ -52,21 +53,21 @@ window.onload = () => {
     vertices = v.vertices
     faces = v.indices
     for(var i=0;i<faces.length;i++){
-        if(i===58808){
-            console.log(faces[i])
-            console.log(vertices[faces[i]])
-        }
+        // if(i===58808){
+        //     console.log(faces[i])
+        //     console.log(vertices[faces[i]])
+        // }
         indexed_vertices.push(vertices[faces[i]])
     }
-    console.log(vertices)
-    console.log(indexed_vertices)
+    // console.log(vertices)
+    // console.log(indexed_vertices)
     // Connecting vertices to the shader
     gl.bindBuffer(gl.ARRAY_BUFFER, gl.createBuffer()); // Creating a Buffer
     gl.bufferData(gl.ARRAY_BUFFER, flatten(indexed_vertices), gl.STATIC_DRAW); // Transforming (flattening) vertices into data type that Shaders can understand
 
     // Associate out shader variables with our data buffer
     let vPosition = gl.getAttribLocation(program, "vPosition"); // Connecting vPosition from vertex shader to vertices
-    gl.vertexAttribPointer(vPosition, 2, gl.FLOAT, false, 0, 0);
+    gl.vertexAttribPointer(vPosition, 4, gl.FLOAT, false, 0, 0);
     gl.enableVertexAttribArray(vPosition);
 
     // Associate out shader variables with our data buffer
