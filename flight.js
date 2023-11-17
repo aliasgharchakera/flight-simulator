@@ -103,7 +103,7 @@ window.onload = () => {
     projectionMatrixLoc = gl.getUniformLocation(program, "projectionMatrix");
 
     document.addEventListener("keydown", handleKeyDown);
-    document.addEventListener("keyup", handleKeyUp);
+    // document.addEventListener("keyup", handleKeyUp);
 
     window.cancelAnimationFrame(anim);
 

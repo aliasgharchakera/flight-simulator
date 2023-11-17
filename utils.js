@@ -1,47 +1,29 @@
-let shift = false;
-
 const handleKeyDown = (e) => {
     const key = e.key;
     switch (key) {
-        case "Shift":
-            shift = true;
-            break;
         case "1":
-            if (shift) {
-                left_ += 0.01;
-                right_ += 0.01;
-            }
+            left_ += 0.01;
+            right_ += 0.01;
             break;
         case "2":
-            if (shift) {
-                right_ -= 0.01;
-                left_ -= 0.01;
-            }
+            right_ -= 0.01;
+            left_ -= 0.01;
             break;
         case "3":
-            if (shift) {
-                bottom_ += 0.01;
-            }
+            bottom_ += 0.01;
             break;
         case "4":
-            if (shift) {
-                bottom_ -= 0.01;
-            }
+            bottom_ -= 0.01;
             break;
         case "5":
-            if (shift) {
-                near_ += 0.01;
-            }
+            near_ += 0.01;
             break;
         case "6":
-            if (shift) {
-                near_ = Math.max(near_ - 0.01, 0.01);
-            }
+            near_ = Math.max(near_ - 0.01, 0.01);
             break;
         case "r":
         case "R":
             // Reset all values to default
-            shift = false;
             eye = vec3(1200, 1200, 300.0);
             at_vec = vec3(0.0, 0.0, 300.0);
             at = add(eye, at_vec);
@@ -128,13 +110,6 @@ const handleKeyDown = (e) => {
 
     window.cancelAnimationFrame(anim);
     anim = window.requestAnimationFrame(render);
-};
-
-const handleKeyUp = (event) => {
-    if (event.keyCode == 16) {
-        shift = false;
-        console.log("Shift unPressed");
-    }
 };
 
 
