@@ -139,7 +139,7 @@ const frustum = (left, right, bottom, top, near, far) => {
 };
 
 // Changes the Y coordinate of the camera accordingly
-const move_camera_pitch = () =>
+const adjustCameraPitch = () =>
     (eye[1] = Math.min(Math.max(eye[1] + at_vec[1] * 50, 1000), 2000));
 
 const getAvg = (v1, v2, v3) =>
