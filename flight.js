@@ -6,6 +6,22 @@ var v
 var faces = []
 var indexed_vertices = []
 
+var modelViewMatrix, projectionMatrix;
+var modelViewMatrixLoc, projectionMatrixLoc;
+var modelviewInv = new Float32Array(16);
+
+let eye = vec3(0, 0, 300.0);
+let at_vec = vec3(0.0, 0.0, 300.0);
+let at = add(eye, at_vec);
+let up = vec3(0.0, 1.0, 0.0);
+
+let left_ = -0.1;
+let right_ = 0.1;
+let bottom_ = -0.5;
+let top_ = 1.5;
+let near_ = 0.1;
+let far_ = -0.1;
+
 function initShaderFiles(file1, file2) {
     function createElementWithFile(file, element_id) {
         const req = new XMLHttpRequest();
@@ -70,6 +86,9 @@ window.onload = () => {
     gl.vertexAttribPointer(vPosition, 4, gl.FLOAT, false, 0, 0);
     gl.enableVertexAttribArray(vPosition);
 
+    modelViewMatrixLoc = gl.getUniformLocation(program, "modelViewMatrix");
+    projectionMatrixLoc = gl.getUniformLocation(program, "projectionMatrix");
+
     // Associate out shader variables with our data buffer
     let vColors = gl.getAttribLocation(program, "vColors"); // Connecting vColors from vertex shader to vertices
     gl.vertexAttribPointer(vColors, 3, gl.FLOAT, false, 0, 0);
@@ -82,6 +101,47 @@ window.onload = () => {
 
 let render = () => {
     gl.clear(gl.COLOR_BUFFER_BIT);
+
+    modelViewMatrix = lookAt(eye, at, up);
+    
+    projectionMatrix = frustum(left_, right_, bottom_, top_, near_, far_);
+
+    modelviewInv = inverse4(modelViewMatrix);
+
+    gl.uniformMatrix4fv(modelViewMatrixLoc, false, flatten(modelViewMatrix));
+    gl.uniformMatrix4fv(projectionMatrixLoc, false, flatten(projectionMatrix));
+
     gl.drawArrays(gl.TRIANGLES, 0, indexed_vertices.length);
     // gl.drawArrays(gl.POINTS, 0, 3);
+};
+
+const frustum = (l, r, b, t, n, f) => {
+    if (l == r) throw "frustum(): left and right are equal";
+    if (b == t) throw "frustum(): bottom and top are equal";
+    if (n == f) throw "frustum(): near and far are equal";
+
+    const w = r - l,
+        h = t - b,
+        d = f - n;
+
+    let result = mat4(
+        (2.0 * n) / w,
+        0.0,
+        (r + l) / w,
+        0.0,
+        0.0,
+        (2.0 * n) / h,
+        (t + b) / h,
+        0.0,
+        0.0,
+        0.0,
+        -(f + n) / d,
+        (-2.0 * f * n) / d,
+        0.0,
+        0.0,
+        -1,
+        0.0
+    );
+
+    return result;
 };
