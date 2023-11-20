@@ -44,6 +44,8 @@ var c;
 let colorScheme = 0;
 
 let viewType = 0;
+let sky = vec4(0.55686, 0.70196, 0.81961, 1.0)
+let space = vec4(0.0,0.0,0.0,1.0)
 
 function initShaderFiles(file1, file2) {
     function createElementWithFile(file, element_id) {
@@ -78,14 +80,12 @@ function initShaderFiles(file1, file2) {
 window.onload = () => {
     let canvas = document.getElementById("gl-canvas"); // Retrieving Canvas element from html
     const view = document.getElementById("view");
-
     const shading = document.getElementById("shading");
 
     gl = canvas.getContext("webgl2"); // getting the webgl2 context
     if (!gl) alert("WebGL isn't available"); // Alerts if WebGL is not supported by the browser
 
     gl.viewport(0, 0, canvas.width, canvas.height); // setting the viewing port and the default color of the canvas
-    gl.clearColor(0.55686, 0.70196, 0.81961, 1.0);
     gl.enable(gl.DEPTH_TEST);
 
     xMax = canvas.width;
@@ -95,7 +95,6 @@ window.onload = () => {
     gl.useProgram(program);
 
     [points,normals] = getPatch(xMin, xMax, zMin, zMax);
-    console.log('returnedd')
 
     vBuffer = gl.createBuffer(); // Creating a Buffer
     gl.bindBuffer(gl.ARRAY_BUFFER, vBuffer); // Creating a Buffer
@@ -123,7 +122,7 @@ window.onload = () => {
 
 let render = () => {
     gl.clear(gl.COLOR_BUFFER_BIT);
-
+    [points,normals] = getPatch(xMin, xMax, zMin, zMax);
     assignColors();
 
     gl.bindBuffer(gl.ARRAY_BUFFER, gl.createBuffer());
@@ -132,8 +131,6 @@ let render = () => {
     let colorLoc = gl.getAttribLocation(program, "vColors");
     gl.vertexAttribPointer(colorLoc, 3, gl.FLOAT, false, 0, 0);
     gl.enableVertexAttribArray(colorLoc);
-
-    [points,normals] = getPatch(xMin, xMax, zMin, zMax);
 
     gl.bindBuffer(gl.ARRAY_BUFFER, vBuffer);
 
@@ -173,14 +170,17 @@ let render = () => {
     gl.uniformMatrix4fv(projectionMatrixLoc, false, flatten(projectionMatrix));
 
     if(viewType===0){
-        gl.drawArrays(gl.TRIANGLES, 0, points.length);
         view.innerHTML = "Faces";
+        gl.clearColor(sky[0], sky[1], sky[2], sky[3]);
+        gl.drawArrays(gl.TRIANGLES, 0, points.length);
     }else if(viewType===1){
-        gl.drawArrays(gl.LINES, 0, points.length);
         view.innerHTML = "Wireframe";
-    }else{
-        gl.drawArrays(gl.POINTS, 0, points.length);
+        gl.clearColor(space[0], space[1], space[2], space[3]);
+        gl.drawArrays(gl.LINES, 0, points.length);
+    }else if(viewType===2){
         view.innerHTML = "Points";
+        gl.clearColor(sky[0], sky[1], sky[2], sky[3]);
+        gl.drawArrays(gl.POINTS, 0, points.length);
     }
     anim = window.requestAnimationFrame(render);
 };

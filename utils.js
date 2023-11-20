@@ -147,37 +147,50 @@ const getAvg = (v1, v2, v3) =>
 
 function assignColors() {
     let c = [];
-    for (let i = 0; i < points.length; i++) {
-        let color = vec3(0,0,0)
-        let red = 0.0, green = 0.0, blue = 0.0;
-        if (points[i][1] < -200){
-            red = 0.18039, green = 0.22353, blue = 0.55686;
-            color = vec3(red, green, blue)
-        }else if (0.0 < points[i][1] && points[i][1] < 200.0){
-            red = 0.588, green = 0.294;
-            color = vec3(red, green, blue)
-        }else if (points[i][1] > 350.0){
-            red = 1.0, green = 1.0, blue = 1.0;
-            color = vec3(red, green, blue)
-        }else{
-            red = 0.24, green = 0.294, blue = 0.08;
-            color = vec3(red, green, blue)
-        }
-        c.push(color);
-    }
-
     colors = [];
-    for (var i = 0; i < c.length; i += 3) {
-        if (colorScheme == 0) {
-            let avg = getAvg(c[i], c[i + 1], c[i + 2]);
-            colors.push(avg);
-            colors.push(avg);
-            colors.push(avg);
+
+    if(viewType===1){
+        for (var i=0;i<points.length;i++){
+            let color = vec3(1,1,1)
+            c.push(color)
         }
-        else{
-            colors.push(c[i]);
-            colors.push(c[i + 1]);
-            colors.push(c[i + 2]);
+        colors = c;
+        // console.log(points)
+    }else{
+        for (let i = 0; i < points.length; i++) {
+            let color = vec3(0,0,0)
+            let red = 0.0, green = 0.0, blue = 0.0;
+            if (points[i][1] < -200){
+                red = 0.18039, green = 0.22353, blue = 0.55686;
+                color = vec3(red, green, blue)
+            }else if (0.0 < points[i][1] && points[i][1] < 200.0){
+                red = 0.588, green = 0.294;
+                color = vec3(red, green, blue)
+            }else if (points[i][1] > 350.0){
+                red = 1.0, green = 1.0, blue = 1.0;
+                color = vec3(red, green, blue)
+            }else{
+                red = 0.24, green = 0.294, blue = 0.08;
+                color = vec3(red, green, blue)
+            }
+            c.push(color);
+        }
+        if(viewType===2){
+            colors = c;
+            return;
+        }
+        for (var i = 0; i < c.length; i += 3) {
+            if (colorScheme == 0) {
+                let avg = getAvg(c[i], c[i + 1], c[i + 2]);
+                colors.push(avg);
+                colors.push(avg);
+                colors.push(avg);
+            }
+            else{
+                colors.push(c[i]);
+                colors.push(c[i + 1]);
+                colors.push(c[i + 2]);
+            }
         }
     }
 };
