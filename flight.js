@@ -43,6 +43,8 @@ var colors;
 var c;
 let colorScheme = 0;
 
+let viewType = 0;
+
 function initShaderFiles(file1, file2) {
     function createElementWithFile(file, element_id) {
         const req = new XMLHttpRequest();
@@ -75,6 +77,10 @@ function initShaderFiles(file1, file2) {
 
 window.onload = () => {
     let canvas = document.getElementById("gl-canvas"); // Retrieving Canvas element from html
+    const view = document.getElementById("view");
+
+    const shading = document.getElementById("shading");
+
     gl = canvas.getContext("webgl2"); // getting the webgl2 context
     if (!gl) alert("WebGL isn't available"); // Alerts if WebGL is not supported by the browser
 
@@ -89,6 +95,7 @@ window.onload = () => {
     gl.useProgram(program);
 
     [points,normals] = getPatch(xMin, xMax, zMin, zMax);
+    console.log('returnedd')
 
     vBuffer = gl.createBuffer(); // Creating a Buffer
     gl.bindBuffer(gl.ARRAY_BUFFER, vBuffer); // Creating a Buffer
@@ -165,7 +172,15 @@ let render = () => {
     gl.uniformMatrix4fv(modelViewMatrixLoc, false, flatten(modelViewMatrix));
     gl.uniformMatrix4fv(projectionMatrixLoc, false, flatten(projectionMatrix));
 
-    gl.drawArrays(gl.TRIANGLES, 0, points.length);
-
+    if(viewType===0){
+        gl.drawArrays(gl.TRIANGLES, 0, points.length);
+        view.innerHTML = "Faces";
+    }else if(viewType===1){
+        gl.drawArrays(gl.LINES, 0, points.length);
+        view.innerHTML = "Wireframe";
+    }else{
+        gl.drawArrays(gl.POINTS, 0, points.length);
+        view.innerHTML = "Points";
+    }
     anim = window.requestAnimationFrame(render);
 };

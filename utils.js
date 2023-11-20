@@ -2,23 +2,29 @@ const handleKeyDown = (e) => {
     const key = e.key;
     switch (key) {
         case "1":
+        case "!":
             left_ += 0.01;
             right_ += 0.01;
             break;
         case "2":
+        case "@":
             right_ -= 0.01;
             left_ -= 0.01;
             break;
         case "3":
+        case "#":
             bottom_ += 0.01;
             break;
         case "4":
+        case "$":
             bottom_ -= 0.01;
             break;
         case "5":
+        case "%":
             near_ += 0.01;
             break;
         case "6":
+        case "^":
             near_ = Math.max(near_ - 0.01, 0.01);
             break;
         case "r":
@@ -100,7 +106,11 @@ const handleKeyDown = (e) => {
             break;
         case "c":
         case "C":
-            colorScheme = colorScheme%3;
+            colorScheme = (colorScheme+1)%3;
+            break;
+        case "v":
+        case "V":
+            viewType = (viewType+1)%3;
             break;
     }
 
