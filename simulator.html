@@ -15,7 +15,8 @@
 
     <body>
         <div style="display: flex; justify-content: space-around;">
-            <div>
+            <div style="display: flex; flex-direction: column; gap: 2rem;">
+                <div>
                 <h3>Press the following keys to control bounds</h3>
                 <table>
                     <tr>
@@ -54,6 +55,40 @@
                         <td>6</td>
                     </tr>
                 </table>
+                </div>
+                <div>
+                    <h3>Viewing Parameters</h3>
+                    <table>
+                        <tr>
+                            <th>Bounds</th>
+                            <th>Value</th>
+                        </tr>
+                        <tr>
+                            <td>Left</td>
+                            <td id="left"></td>
+                        </tr>
+                        <tr>
+                            <td>Right</td>
+                            <td id="right"></td>
+                        </tr>
+                        <tr>
+                            <td>Top</td>
+                            <td id="top"></td>
+                        </tr>
+                        <tr>
+                            <td>Bottom</td>
+                            <td id="bottom"></td>
+                        </tr>
+                        <tr>
+                            <td>Near</td>
+                            <td id="near"></td>
+                        </tr>
+                        <tr>
+                            <td>Far</td>
+                            <td id="far"></td>
+                        </tr>
+                    </table>
+                </div>
             </div>
         <div style="display: flex; flex-direction: column;">
         <canvas
