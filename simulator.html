@@ -15,13 +15,80 @@
 
     <body>
         <div style="display: flex; justify-content: space-around;">
-            <div>
-                <p>1 to move left</p>
-                <p>2 to move right</p>
-                <p>3 to move upwards</p>
-                <p>4 to move downwards</p>
-                <p>5 to move nearer</p>
-                <p>6 to move away</p>
+            <div style="display: flex; flex-direction: column; gap: 2rem;">
+                <div>
+                <h3>Press the following keys to control bounds</h3>
+                <table>
+                    <tr>
+                        <th></th>
+                        <th>Decrease</th>
+                        <th>Increase</th>
+                    </tr>
+                    <tr>
+                        <td>Left</td>
+                        <td>Shift+1</td>
+                        <td>1</td>
+                    </tr>
+                    <tr>
+                        <td>Right</td>
+                        <td>Shift+2</td>
+                        <td>2</td>
+                    </tr>
+                    <tr>
+                        <td>Top</td>
+                        <td>Shift+3</td>
+                        <td>3</td>
+                    </tr>
+                    <tr>
+                        <td>Bottom</td>
+                        <td>Shift+4</td>
+                        <td>4</td>
+                    </tr>
+                    <tr>
+                        <td>Near</td>
+                        <td>Shift+5</td>
+                        <td>5</td>
+                    </tr>
+                    <tr>
+                        <td>Far</td>
+                        <td>Shift+6</td>
+                        <td>6</td>
+                    </tr>
+                </table>
+                </div>
+                <div>
+                    <h3>Viewing Parameters</h3>
+                    <table>
+                        <tr>
+                            <th>Bounds</th>
+                            <th>Value</th>
+                        </tr>
+                        <tr>
+                            <td>Left</td>
+                            <td id="left"></td>
+                        </tr>
+                        <tr>
+                            <td>Right</td>
+                            <td id="right"></td>
+                        </tr>
+                        <tr>
+                            <td>Top</td>
+                            <td id="top"></td>
+                        </tr>
+                        <tr>
+                            <td>Bottom</td>
+                            <td id="bottom"></td>
+                        </tr>
+                        <tr>
+                            <td>Near</td>
+                            <td id="near"></td>
+                        </tr>
+                        <tr>
+                            <td>Far</td>
+                            <td id="far"></td>
+                        </tr>
+                    </table>
+                </div>
             </div>
         <div style="display: flex; flex-direction: column;">
         <canvas

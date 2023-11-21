@@ -29,6 +29,15 @@ let top_ = 1.5;
 let near_ = 0.1;
 let far_ = -0.1;
 
+let leftValue, rightValue, bottomValue, topValue, nearValue, farValue;
+
+let leftBound = [-0.5,0.0]
+let rightBound = [0,0.5]
+let bottomBound = [-1,-0.3]
+let topBound = [0.5,2]
+let nearBound = [0.05,0.15]
+let farBound = [-0.15,-0.05]
+
 let pitch = 0;
 let yaw = 0;
 let roll = 0;
@@ -82,6 +91,20 @@ window.onload = () => {
     const view = document.getElementById("view");
     const shading = document.getElementById("shading");
 
+    leftValue = document.getElementById("left");
+    rightValue = document.getElementById("right");
+    bottomValue = document.getElementById("bottom");
+    topValue = document.getElementById("top");
+    nearValue = document.getElementById("near");
+    farValue = document.getElementById("far");
+
+    leftValue.innerHTML = left_;
+    rightValue.innerHTML = right_;
+    bottomValue.innerHTML = bottom_;
+    topValue.innerHTML = top_;
+    nearValue.innerHTML = near_;
+    farValue.innerHTML = far_;
+
     gl = canvas.getContext("webgl2"); // getting the webgl2 context
     if (!gl) alert("WebGL isn't available"); // Alerts if WebGL is not supported by the browser
 
@@ -122,65 +145,68 @@ window.onload = () => {
 
 let render = () => {
     gl.clear(gl.COLOR_BUFFER_BIT);
-    [points,normals] = getPatch(xMin, xMax, zMin, zMax);
-    assignColors();
+    if(!Escape){
+        [points,normals] = getPatch(xMin, xMax, zMin, zMax);
+        assignColors();
 
-    gl.bindBuffer(gl.ARRAY_BUFFER, gl.createBuffer());
-    gl.bufferData(gl.ARRAY_BUFFER, flatten(colors), gl.STATIC_DRAW);
+        gl.bindBuffer(gl.ARRAY_BUFFER, gl.createBuffer());
+        gl.bufferData(gl.ARRAY_BUFFER, flatten(colors), gl.STATIC_DRAW);
 
-    let colorLoc = gl.getAttribLocation(program, "vColors");
-    gl.vertexAttribPointer(colorLoc, 3, gl.FLOAT, false, 0, 0);
-    gl.enableVertexAttribArray(colorLoc);
+        let colorLoc = gl.getAttribLocation(program, "vColors");
+        gl.vertexAttribPointer(colorLoc, 3, gl.FLOAT, false, 0, 0);
+        gl.enableVertexAttribArray(colorLoc);
 
-    gl.bindBuffer(gl.ARRAY_BUFFER, vBuffer);
+        gl.bindBuffer(gl.ARRAY_BUFFER, vBuffer);
 
-    if (Escape == false) {
-        gl.bufferData(gl.ARRAY_BUFFER, flatten(points), gl.STATIC_DRAW);
+        if (Escape == false) {
+            gl.bufferData(gl.ARRAY_BUFFER, flatten(points), gl.STATIC_DRAW);
+        }
+
+        let rotate_x_matrix = rotateX(pitch);
+        let rotate_y_matrix = rotateY(yaw);
+        let rotate_z_matrix = rotateZ(roll);
+
+        up = vec4(0, 1, 0, 0);
+        up = mult(rotate_z_matrix, up);
+        up = vec3(up[0], up[1], up[2]);
+
+        at_vec = vec4(0.0, 0.0, speed,0);
+        let rotate_xy = mult(rotate_y_matrix, rotate_x_matrix);
+        at_vec = mult(rotate_xy, at_vec);
+        at_vec = vec3(at_vec[0], at_vec[1], at_vec[2]);
+
+        if (!stopped) adjustCameraPitch();
+
+        at = add(eye, at_vec);
+        modelViewMatrix = lookAt(eye, at, up);
+
+        if (!stopped) eye = add(eye, at_vec);
+
+        xMin = eye[0] - 1200;
+        xMax = eye[0] + 1200;
+
+        zMin = eye[2] - 1200;
+        zMax = eye[2] + 1200;
+        
+        projectionMatrix = frustum(left_, right_, bottom_, top_, near_, far_);
+
+        gl.uniformMatrix4fv(modelViewMatrixLoc, false, flatten(modelViewMatrix));
+        gl.uniformMatrix4fv(projectionMatrixLoc, false, flatten(projectionMatrix));
+
+        if(viewType===0){
+            view.innerHTML = "Faces";
+            gl.clearColor(sky[0], sky[1], sky[2], sky[3]);
+            gl.drawArrays(gl.TRIANGLES, 0, points.length);
+        }else if(viewType===1){
+            view.innerHTML = "Wireframe";
+            gl.clearColor(space[0], space[1], space[2], space[3]);
+            gl.drawArrays(gl.LINES, 0, points.length);
+        }else if(viewType===2){
+            view.innerHTML = "Points";
+            gl.clearColor(sky[0], sky[1], sky[2], sky[3]);
+            gl.drawArrays(gl.POINTS, 0, points.length);
+        }
+        anim = window.requestAnimationFrame(render);
     }
-
-    let rotate_x_matrix = rotateX(pitch);
-    let rotate_y_matrix = rotateY(yaw);
-    let rotate_z_matrix = rotateZ(roll);
-
-    up = vec4(0, 1, 0, 0);
-    up = mult(rotate_z_matrix, up);
-    up = vec3(up[0], up[1], up[2]);
-
-    at_vec = vec4(0.0, 0.0, speed,0);
-    let rotate_xy = mult(rotate_y_matrix, rotate_x_matrix);
-    at_vec = mult(rotate_xy, at_vec);
-    at_vec = vec3(at_vec[0], at_vec[1], at_vec[2]);
-
-    if (!stopped) adjustCameraPitch();
-
-    at = add(eye, at_vec);
-    modelViewMatrix = lookAt(eye, at, up);
-
-    if (!stopped) eye = add(eye, at_vec);
-
-    xMin = eye[0] - 1200;
-    xMax = eye[0] + 1200;
-
-    zMin = eye[2] - 1200;
-    zMax = eye[2] + 1200;
     
-    projectionMatrix = frustum(left_, right_, bottom_, top_, near_, far_);
-
-    gl.uniformMatrix4fv(modelViewMatrixLoc, false, flatten(modelViewMatrix));
-    gl.uniformMatrix4fv(projectionMatrixLoc, false, flatten(projectionMatrix));
-
-    if(viewType===0){
-        view.innerHTML = "Faces";
-        gl.clearColor(sky[0], sky[1], sky[2], sky[3]);
-        gl.drawArrays(gl.TRIANGLES, 0, points.length);
-    }else if(viewType===1){
-        view.innerHTML = "Wireframe";
-        gl.clearColor(space[0], space[1], space[2], space[3]);
-        gl.drawArrays(gl.LINES, 0, points.length);
-    }else if(viewType===2){
-        view.innerHTML = "Points";
-        gl.clearColor(sky[0], sky[1], sky[2], sky[3]);
-        gl.drawArrays(gl.POINTS, 0, points.length);
-    }
-    anim = window.requestAnimationFrame(render);
 };

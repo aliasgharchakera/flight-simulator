@@ -2,30 +2,134 @@ const handleKeyDown = (e) => {
     const key = e.key;
     switch (key) {
         case "1":
+            if(left_>leftBound[0]){
+                leftValue.style.backgroundColor = "white"
+                left_ -= 0.1;
+                leftValue.innerHTML = left_
+                if(left_===leftBound[0]){
+                    leftValue.style.backgroundColor = "red"
+                }
+            }
+            break
         case "!":
-            left_ += 0.01;
-            right_ += 0.01;
+            if(left_<leftBound[1]){
+                leftValue.style.backgroundColor = "white"
+                left_ += 0.1;
+                leftValue.innerHTML = left_;
+                if(left_===leftBound[1]){
+                    leftValue.style.backgroundColor = "red"
+                }
+            }
+            // right_ += 0.01;
             break;
         case "2":
+            if(right_<rightBound[1]){
+                rightValue.style.backgroundColor = "white"
+                right_ += 0.1;
+                rightValue.innerHTML = right_;
+                if(right_===rightBound[1]){
+                    rightValue.style.backgroundColor = "red"
+                }
+            }
+            break
         case "@":
-            right_ -= 0.01;
-            left_ -= 0.01;
+            if(right_>rightBound[0]){
+                rightValue.style.backgroundColor = "white"
+                right_ -= 0.1;
+                rightValue.innerHTML = right_;
+                if(right_===rightBound[0]){
+                    rightValue.style.backgroundColor = "red"
+                }
+            }
+            // left_ -= 0.01;
             break;
         case "3":
+            if(top_>topBound[0]){
+                topValue.style.backgroundColor = "white"
+                top_ -= 0.1;
+                if(top_<=topBound[0]){
+                    top_ = topBound[0]
+                    topValue.style.backgroundColor = "red"
+                }
+                topValue.innerHTML = top_;
+            }
+            break
         case "#":
-            bottom_ += 0.01;
+            if(top_<topBound[1]){
+                topValue.style.backgroundColor = "white"
+                top_ += 0.1;
+                if(top_>=topBound[1]){
+                    top_ = topBound[1]
+                    topValue.style.backgroundColor = "red"
+                }
+                topValue.innerHTML = top_;
+            }
             break;
         case "4":
+            if(bottom_>bottomBound[0]){
+                bottomValue.style.backgroundColor = "white"
+                bottom_ -= 0.1;
+                if(bottom_<=bottomBound[0]){
+                    bottom_ = bottomBound[0]
+                    bottomValue.style.backgroundColor = "red"
+                }
+                bottomValue.innerHTML = bottom_;
+            }
+            break
         case "$":
-            bottom_ -= 0.01;
+            if(bottom_<bottomBound[1]){
+                bottomValue.style.backgroundColor = "white"
+                bottom_ += 0.1;
+                if(bottom_>=bottomBound[1]){
+                    bottom_ = bottomBound[1]
+                    bottomValue.style.backgroundColor = "red"
+                }
+                bottomValue.innerHTML = bottom_;
+            }
             break;
         case "5":
+            if(near_>nearBound[0]){
+                nearValue.style.backgroundColor = "white"
+                near_ -= 0.01;
+                if(near_<=nearBound[0]){
+                    near_ = nearBound[0]
+                    nearValue.style.backgroundColor = "red"
+                }
+                nearValue.innerHTML = near_;
+            }
+            break
         case "%":
-            near_ += 0.01;
+            if(near_<nearBound[1]){
+                nearValue.style.backgroundColor = "white"
+                near_ += 0.01;
+                if(near_>=nearBound[1]){
+                    near_ = nearBound[1]
+                    nearValue.style.backgroundColor = "red"
+                }
+                nearValue.innerHTML = near_;
+            }
             break;
         case "6":
+            if(far_>farBound[0]){
+                farValue.style.backgroundColor = "white"
+                far_ -= 0.01;
+                if(far_<=farBound[0]){
+                    far_ = farBound[0]
+                    farValue.style.backgroundColor = "red"
+                }
+                farValue.innerHTML = far_;
+            }
+            break
         case "^":
-            near_ = Math.max(near_ - 0.01, 0.01);
+            if(far_<farBound[1]){
+                farValue.style.backgroundColor = "white"
+                far_ += 0.01;
+                if(far_>=farBound[1]){
+                    far_ = farBound[1]
+                    farValue.style.backgroundColor = "red"
+                }
+                farValue.innerHTML = far_;
+            }
             break;
         case "r":
         case "R":
@@ -36,19 +140,31 @@ const handleKeyDown = (e) => {
             up = vec3(0.0, 1.0, 0.0);
 
             left_ = -0.1;
+            leftValue.innerHTML = left_;
+            leftValue.style.backgroundColor = "white"
             right_ = 0.1;
+            rightValue.innerHTML = right_;
+            rightValue.style.backgroundColor = "white"
             bottom_ = -0.5;
+            bottomValue.innerHTML = bottom_;
+            bottomValue.style.backgroundColor = "white"
             top_ = 1.5;
+            topValue.innerHTML = top_;
+            topValue.style.backgroundColor = "white"
             near_ = 0.1;
+            nearValue.innerHTML = near_;
+            nearValue.style.backgroundColor = "white"
             far_ = -0.1;
+            farValue.innerHTML = far_;
+            farValue.style.backgroundColor = "white"
             break;
         case "Escape":
             points = [];
-            zMin = zMax = xMax = xMin = 0;
+            // zMin = zMax = xMax = xMin = 0;
             gl.clearColor(0, 0, 0, 1);
             gl.clear(gl.COLOR_BUFFER_BIT);
-            Escape = true;
-            gl.drawArrays(gl.TRIANGLES, 0, points.length);
+            Escape = !Escape;
+            gl.drawArrays(gl.TRIANGLES, 0, 0);
             break;
         case "w":
         case "W":
