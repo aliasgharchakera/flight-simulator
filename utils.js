@@ -2,30 +2,43 @@ const handleKeyDown = (e) => {
     const key = e.key;
     switch (key) {
         case "1":
+            left_ -= 0.01;
+            break
         case "!":
             left_ += 0.01;
-            right_ += 0.01;
+            // right_ += 0.01;
             break;
         case "2":
+            right_ -= 0.01;
+            break
         case "@":
             right_ -= 0.01;
-            left_ -= 0.01;
+            // left_ -= 0.01;
             break;
         case "3":
+            top_ -= 0.01;
+            console.log('top changed')
+            break
         case "#":
-            bottom_ += 0.01;
+            top_ += 0.01;
             break;
         case "4":
-        case "$":
             bottom_ -= 0.01;
+            break
+        case "$":
+            bottom_ += 0.01;
             break;
         case "5":
+            near_ -= 0.01;
+            break
         case "%":
             near_ += 0.01;
             break;
         case "6":
+            far_ -= 0.01;
+            break
         case "^":
-            near_ = Math.max(near_ - 0.01, 0.01);
+            far_ += 0.01;
             break;
         case "r":
         case "R":
@@ -44,11 +57,11 @@ const handleKeyDown = (e) => {
             break;
         case "Escape":
             points = [];
-            zMin = zMax = xMax = xMin = 0;
+            // zMin = zMax = xMax = xMin = 0;
             gl.clearColor(0, 0, 0, 1);
             gl.clear(gl.COLOR_BUFFER_BIT);
-            Escape = true;
-            gl.drawArrays(gl.TRIANGLES, 0, points.length);
+            Escape = !Escape;
+            gl.drawArrays(gl.TRIANGLES, 0, 0);
             break;
         case "w":
         case "W":

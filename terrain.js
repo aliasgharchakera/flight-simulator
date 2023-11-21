@@ -18,6 +18,7 @@ const getPatch = (xmin,xmax,zmin,zmax) => {
 
     for(var i=xmin;i<xmax;i+=step_x){
         var z_off = zmin/10
+        // console.log('setting z_off to',z_off)
         for(var j=zmin;j<zmax;j+=step_z){
             const y = getHeight(x_off, z_off)
             const pos = vec4(i,y, j,1)
@@ -59,6 +60,7 @@ const getPatch = (xmin,xmax,zmin,zmax) => {
                 normals.push(normal)
             }
         }
+        
         return [indexed_vertices,normals]
     }
     
