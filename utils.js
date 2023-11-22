@@ -226,7 +226,8 @@ const handleKeyDown = (e) => {
             break;
         case "c":
         case "C":
-            colorScheme = (colorScheme+1)%3;
+            shadingType = (shadingType+1)%3;
+            console.log(shadingType);
             break;
         case "v":
         case "V":
@@ -300,7 +301,7 @@ function assignColors() {
             return;
         }
         for (var i = 0; i < c.length; i += 3) {
-            if (colorScheme == 0) {
+            if (shadingType == 0) {
                 let avg = getAvg(c[i], c[i + 1], c[i + 2]);
                 colors.push(avg);
                 colors.push(avg);
