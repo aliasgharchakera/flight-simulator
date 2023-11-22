@@ -5,20 +5,22 @@ const handleKeyDown = (e) => {
             if(left_>leftBound[0]){
                 leftValue.style.backgroundColor = "white"
                 left_ -= 0.1;
-                leftValue.innerHTML = left_
-                if(left_===leftBound[0]){
+                if(left_<=leftBound[0]){
+                    left_ = leftBound[0]
                     leftValue.style.backgroundColor = "red"
                 }
+                leftValue.innerHTML = left_
             }
             break
         case "!":
             if(left_<leftBound[1]){
                 leftValue.style.backgroundColor = "white"
                 left_ += 0.1;
-                leftValue.innerHTML = left_;
-                if(left_===leftBound[1]){
+                if(left_>=leftBound[1]){
+                    left_ = leftBound[1]
                     leftValue.style.backgroundColor = "red"
                 }
+                leftValue.innerHTML = left_;
             }
             // right_ += 0.01;
             break;
@@ -26,20 +28,22 @@ const handleKeyDown = (e) => {
             if(right_<rightBound[1]){
                 rightValue.style.backgroundColor = "white"
                 right_ += 0.1;
-                rightValue.innerHTML = right_;
-                if(right_===rightBound[1]){
+                if(right_>=rightBound[1]){
+                    right_ = rightBound[1]
                     rightValue.style.backgroundColor = "red"
                 }
+                rightValue.innerHTML = right_;
             }
             break
         case "@":
             if(right_>rightBound[0]){
                 rightValue.style.backgroundColor = "white"
                 right_ -= 0.1;
-                rightValue.innerHTML = right_;
-                if(right_===rightBound[0]){
+                if(right_<=rightBound[0]){
+                    right_ = rightBound[0]
                     rightValue.style.backgroundColor = "red"
                 }
+                rightValue.innerHTML = right_;
             }
             // left_ -= 0.01;
             break;
