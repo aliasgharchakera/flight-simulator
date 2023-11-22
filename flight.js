@@ -215,6 +215,11 @@ let render = () => {
         gl.uniformMatrix4fv(modelViewMatrixLoc, false, flatten(modelViewMatrix));
         gl.uniformMatrix4fv(projectionMatrixLoc, false, flatten(projectionMatrix));
         gl.uniform1i(shadingTypeLoc, shadingType);
+
+        if (shadingType === 0) shading.innerHTML = "Flat Shading";
+        else if (shadingType === 1) shading.innerHTML = "Smooth Shading";
+        else shading.innerHTML = "Phong Shading";
+
         if(viewType===0){
             view.innerHTML = "Faces";
             gl.clearColor(sky[0], sky[1], sky[2], sky[3]);
