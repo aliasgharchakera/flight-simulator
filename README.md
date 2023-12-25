@@ -1,78 +1,68 @@
-[![Review Assignment Due Date](https://classroom.github.com/assets/deadline-readme-button-24ddc0f5d75046c5622901739e7c5dd533143b0c8e959d652212380cedb1ea36.svg)](https://classroom.github.com/a/EhqrU5Qu)
-# Homework 4: Flight Simulator
-# CS 440 Computer Graphics, Fall 2023
-***
+# Flight Simulator
 
-# Purpose
+## Introduction
+This flight simulator was designed as part of the course **CS 440 Computer Graphics** at **Habib University, Karachi**. The simulator is designed to be a simple flight simulator with a few controls and a simple environment. The simulator is designed using **WebGL** and **JavaScript**.
 
-This project assesses your mastery of viewing transformations. It brings together many of the topics we cover in Module II. These are:
+## Controls
+The simulator has the following controls:
+- **W**: Pitch up
+- **S**: Pitch down
+- **A**: Yaw left
+- **D**: Yaw right
+- **Q**: Roll left
+- **E**: Roll right
+- **Up Arrow**: Increase speed
+- **Down Arrow**: Decrease speed
+- **C**: Switch shader
+- **V**: Switch viewing mode
+- **R**: Reset the plane to its initial position
+- **Esc**: Exit the simulator
 
-- viewing
-- shading
-- interaction
-- geometry
+## Viewing Models
+The simulator has three viewing models:
+- *Triangle*: The simulator renders the plane as triangles.
+- *Wireframe*: The simulator renders the plane as a wireframe.
+- *Point*: The simulator renders the plane as points.
 
-# Background
+## Shaders
+The simulator has two shaders:
+- *Phong Shader*
+- *Flat Shader*
+- *Smooth Shader*
 
-For this assignment, you should
-- be able to visualize 3D Cartesian space
-- understand camera parameters and their representation in WebGL
-- be able to capture user interaction and have it effect your WebGL program
-- know the various shading schemes
-- be able to judge the best platform (CPU/application program vs. GPU/shader) to execute a desired functionality
-- be able to apply trigonometric operations
-- understand the memory interaction between the CPU and the GPU
-- know WebGL's coordinate system and drawing routines
-- be able to write one or more files in order to display GPU-supported renderings in an HMTL page
-- be able to look up, where necessary, and implement the functions and syntax in HTML, JavaScript, and WebGL for desired functionality.
+## Terrain
+The terrain is generated using a height map. The height map is a 2D array of values between 0 and 1. The simulator uses the height map to generate a terrain. [Perlin noise](http://git.io/perlin.js) is used to generate the height map.
 
-# The Problem Set
+## Usage
+Clone the repository and run the following command in the root directory of the repository:
+```
+python -m http.server
+```
+Then open the following URL in your browser:
+http://localhost:8000/simulator.html
 
-The problems are defined in `hw4.tex` which is to be compiled using a LaTeX compiler.
+## Screenshots
+Following are some screenshots of the simulator:
+<figure>
+    <img src="images/faces.png" alt="Faces" width="300">
+    <figcaption>Viewing Mode: Triangles, Shader: Phong</figcaption>
+</figure>
 
-# Previous Feedback
+<figure>
+    <img src="images/wireframe.png" alt="Wireframe" width="300">
+    <figcaption>Viewing Mode: Wireframe, Shader: Phong</figcaption>
+</figure>
 
-Feedback from the previous set of students who attempted this assignment is summarized on the accompanying page on Canvas. It was assigned to them as Project 1.
+<figure>
+    <img src="images/points.png" alt="Points" width="300">
+    <figcaption>Viewing Mode: Point, Shader: Phong</figcaption>
+</figure>
 
-Things got rushed due to numerous assessments last year because of which deadlines were adjusted run-time and expectations were updated. Ample time is provided this time.
+## Acknowledgements
+- [Perlin noise](http://git.io/perlin.js)
+- [WebGL2 Fundamentals](https://webgl2fundamentals.org/)
+- [Dr. Waqar Saleem](https://habib.edu.pk/SSE/dr-waqar-saleem/)
 
-# Submission
-
-There are 3 parts to this assignment. Lack of submission of any part will result in a loss of marks.
-
-## 4.1 Solving the Problem Set
-
-Each problem specifies the names of the files to be submitted for it. Please make sure your submitted files have the indicated names. Any files in your GitHub repository with these names at the time of the deadline will be considered as your submission. As your submission will be graded by your peers, please do not include identifying information in it.
-
-This is a __team submission__, i.e. a single submission per team. Your team has a single repository to which each of you will have access. Your team submission will be assigned a __Submission Score__ based on the correctness of the contained solutions.
-
-Deadline: 2359h on Sun, 12 Nov
-
-## 4.2 Feedback
-
-You will provide feedback on your team and on the assignment by filling the feedback form which will be made available as _HW 4.2_ on the course page. This is due at the same time as the problem solutions.
-
-This is an __individual submission__, i.e. each of you has to fill the form. Doing so contributes to your __Team Factor__ which is 1 by default and is penalized in case of non-submission of the form, dishonest feedback, or unequal contribution to the submission as reported by your buddies and/or the commit history on GitHub.
-
-Deadline: 2359h on Sun, 12 Nov
-
-## 4.3 Peer Review
-
-Two submissions will be shared with you for review which you will evaluate according to the accompanying rubric. You will submit a filled copy of the rubric for each submission against _HW 4.3_ which will be made available on the course page.
-
-This is an __individual submission__ on LMS and contributes to your individual __Review Factor__ which is 1 by default and penalized for non-submission.
-
-Deadline: 2359h on Tue, 14 Nov
-
-# Grading
-
-Your submission will be peer-graded in a double-blind manner as per the criteria specified in the accompanying file, _hw4-review.xlsx_. The score thus earned will be your _Submission Score_.
-
-Your individual score in this homework is the product of your Submission Score, Team Factor, and Review Factor.
-
-# Discussion
-
-This is a lengthy and potentially confusing assignment. There is a lot to take in and it may seem complicated and daunting. So do not be shy to reach out! In case of confusion or lack of clarity, do not hesitate to contact the course staff. We also encourage you to:
-
-- discuss with your buddy,
-- post in the discussion thread linked in the Assignment module on the course page on Canvas.
+## Authors
+- [Ali Asghar Chakera](https://github.com/aliasgharchakera)
+- [Mustafa Sohail](https://github.com/Mustafasohail7)
